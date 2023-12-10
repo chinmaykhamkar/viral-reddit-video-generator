@@ -2,6 +2,12 @@
 #### flow of code explained below
 ![Alt Text](./flow.png)
 
+#### Instructions to run
+1. clone the repo
+2. ```pip install whisper cv2 tqdm moviepy```
+3. make sure you have ffmpeg on your machine 
+4. run python index.py
+
 #### things to improve and future scope
 <kbd>→</kbd> improve the function where text is added on image frame, better ui looks and feel, spacing
 <br>
