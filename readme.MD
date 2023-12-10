@@ -2,7 +2,7 @@
 
 #### demo 
 
-![Alt vid](./demo.mp4)
+in demo.mp4 file
 
 #### flow of code explained below
 ![Alt Text](./flow.png)
