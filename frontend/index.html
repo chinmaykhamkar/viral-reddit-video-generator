@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Generation App</title>
+</head>
+
+<body>
+    <h1>Video Generation App</h1>
+    <form id="videoForm">
+        <label for="textInput">Enter Text:</label>
+        <textarea id="textInput" name="text" rows="4" cols="50" required></textarea>
+
+        <label for="fileInput">Upload Text File (Optional):</label>
+        <input type="file" id="fileInput" name="file" accept=".txt">
+
+        <label for="videoInput">Upload Video File:</label>
+        <input type="file" id="videoInput" name="video" accept=".mp4" required>
+
+        <button type="button" onclick="generateVideo()">Generate Video</button>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function generateVideo() {
+            const textInput = document.getElementById('textInput').value;
+            const fileInput = document.getElementById('fileInput');
+            const videoInput = document.getElementById('videoInput');
+
+            // const text = fileInput.files[0] ? getFileContent(fileInput.files[0]) : textInput;
+
+            const data = {
+                text : textInput
+            }
+            console.log(data)
+            // formData.append('video', videoInput.files[0]);
+
+            axios.post('http://127.0.0.1:5000/generate-video', {
+                params: data,
+                // responseType: 'blob',  // Specify response type as blob to handle binary data (mp4 file)
+            })
+                .then(response => {
+                    // Handle the generated video file (response.data)
+                    // For example, you can create a download link
+                    // const downloadLink = document.createElement('a');
+                    // downloadLink.href = URL.createObjectURL(new Blob([response.data], { type: 'video/mp4' }));
+                    // downloadLink.download = 'generated_video.mp4';
+                    // downloadLink.click();
+                    console.log(response)
+                })
+                .catch(error => {
+                    console.error('Error generating video:', error);
+                });
+        }
+
+        function getFileContent(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    resolve(event.target.result);
+                };
+                reader.onerror = (error) => {
+                    reject(error);
+                };
+                reader.readAsText(file);
+            });
+        }
+
+    </script>
+</body>
+
+</html>
