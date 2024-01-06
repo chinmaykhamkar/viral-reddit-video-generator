@@ -60,7 +60,7 @@ def generate_video():
         # print("@@@@ here @@@@")
         # # Return the video file as a response
         # return send_file(video_buffer, mimetype='video/mp4', as_attachment=True, download_name='generated_video.mp4')
-        return "text"
+        return text
 
 if __name__ == '__main__':
     app.run(debug=True)
