@@ -38,6 +38,18 @@
             }
         });
 
+        document.querySelector('#videoInput').addEventListener('input', function() {
+            const file = this.files[0];
+            const vfr = URL.createObjectURL(file);
+            
+            vfr.onload = () => {
+                console.log(vfr.result);
+            }
+            vfr.onerror = () => {
+                console.log(vfr.error);
+            }
+        });
+
         function generateVideo() {
             const textInput = document.getElementById('textInput').value;
             const fileInput = txtFile;
@@ -114,3 +126,5 @@
 </body>
 
 </html>
+
+
