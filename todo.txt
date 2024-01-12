@@ -1,0 +1,2 @@
+1. figure out to send the video to frontend
+2. divide txt chunk and superimpose on video

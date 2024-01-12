@@ -26,7 +26,7 @@
 
     <script>
         var txtFile = '';
-        document.querySelector('#fileInput').addEventListener('input', function() {
+        document.querySelector('#fileInput').addEventListener('input', function () {
             const file = this.files[0];
             let fr = new FileReader();
             fr.readAsText(file);
@@ -38,93 +38,30 @@
             }
         });
 
-        document.querySelector('#videoInput').addEventListener('input', function() {
-            const file = this.files[0];
-            const vfr = URL.createObjectURL(file);
-            
-            vfr.onload = () => {
-                console.log(vfr.result);
-            }
-            vfr.onerror = () => {
-                console.log(vfr.error);
-            }
-        });
-
         function generateVideo() {
             const textInput = document.getElementById('textInput').value;
             const fileInput = txtFile;
+            const videoInput = document.getElementById('videoInput').files[0];
             const finalTxt = fileInput == '' ? textInput : fileInput;
             const data = {
-                text : finalTxt
+                text: finalTxt
             }
-            console.log(data);
+            const formData = new FormData();
+            formData.append('text', finalTxt);
+            formData.append('video', videoInput);
+            // for (const pair of formData.entries()) {
+            //     console.log(pair[0] + ', ' + pair[1]);
+            // }
+            axios.post('http://127.0.0.1:5000/generate-video', formData)
+                .then((result) => {
+                    console.log(result.data);
+                }).catch((err) => {
+                    console.log(err);
+                });
+
         }
-
-
-        // const uploadForm = document.querySelector('#videoForm');
-        // uploadForm.addEventListener('submit', (e) => {
-        //     e.preventDefault();
-        //     let txtFile = e.target.file.files[0];
-        //     let txt = e.target.text.value;
-        //     let formData = new FormData();
-        //     formData.append('file', txtFile);
-        //     formData.append('text', txt);
-        //     formData.forEach((value, key) => {
-        //         console.log(key, value);
-        //     });
-        // });
-
-        
-
-        // function generateVideo() {
-        //     const textInput = document.getElementById('textInput').value;
-        //     const fileInput = document.getElementById('fileInput');
-        //     const videoInput = document.getElementById('videoInput');
-
-        //     // const text = fileInput.files[0] ? getFileContent(fileInput.files[0]) : textInput;
-
-        //     const data = {
-        //         text: textInput,
-
-
-        //     }
-        //     console.log(data)
-        //     // formData.append('video', videoInput.files[0]);
-
-        //     axios.post('http://127.0.0.1:5000/generate-video', {
-        //         params: data,
-        //         // responseType: 'blob',  // Specify response type as blob to handle binary data (mp4 file)
-        //     })
-        //         .then(response => {
-        //             // Handle the generated video file (response.data)
-        //             // For example, you can create a download link
-        //             // const downloadLink = document.createElement('a');
-        //             // downloadLink.href = URL.createObjectURL(new Blob([response.data], { type: 'video/mp4' }));
-        //             // downloadLink.download = 'generated_video.mp4';
-        //             // downloadLink.click();
-        //             console.log(response)
-        //         })
-        //         .catch(error => {
-        //             console.error('Error generating video:', error);
-        //         });
-        // }
-
-        // function getFileContent(file) {
-        //     return new Promise((resolve, reject) => {
-        //         const reader = new FileReader();
-        //         reader.onload = (event) => {
-        //             resolve(event.target.result);
-        //         };
-        //         reader.onerror = (error) => {
-        //             reject(error);
-        //         };
-        //         reader.readAsText(file);
-        //     });
-        // }
 
     </script>
 </body>
 
 </html>
-
-
