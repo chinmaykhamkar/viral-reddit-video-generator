@@ -38,26 +38,34 @@
             }
         });
 
-        function generateVideo() {
+        async function generateVideo() {
             const textInput = document.getElementById('textInput').value;
             const fileInput = txtFile;
             const videoInput = document.getElementById('videoInput').files[0];
             const finalTxt = fileInput == '' ? textInput : fileInput;
-            const data = {
-                text: finalTxt
-            }
+            // const data = {
+            //     text: finalTxt
+            // }
             const formData = new FormData();
             formData.append('text', finalTxt);
             formData.append('video', videoInput);
             // for (const pair of formData.entries()) {
             //     console.log(pair[0] + ', ' + pair[1]);
             // }
-            axios.post('http://127.0.0.1:5000/generate-video', formData)
-                .then((result) => {
-                    console.log(result.data);
-                }).catch((err) => {
-                    console.log(err);
-                });
+            try {
+                const response = await axios.get('http://127.0.0.1:5000/generate-video', formData, { responseType: 'blob' });
+                const videoBlob = new Blob([response.data], { type: 'video/mp4' });
+                const videoElement = document.createElement('video');
+                videoElement.src = URL.createObjectURL(videoBlob);
+                videoElement.controls = true;
+                const existingVideos = document.querySelectorAll('video');
+                existingVideos.forEach(el => el.remove());
+                document.body.appendChild(videoElement);
+
+            }
+            catch (err) {
+                console.log(error);
+            }
 
         }
 
