@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, jsonify, render_template, request, send_file
 from gtts import gTTS
 from moviepy.editor import VideoFileClip, TextClip, concatenate_videoclips, CompositeVideoClip
 import os
@@ -42,6 +42,8 @@ def generate_video():
         os.remove(video_path)
 
         # Send the final video file as a response
+        # return jsonify({'resultVideo': f'/static/{os.path.basename(output_path)}'})
+
         return send_file(output_path, as_attachment=True, download_name='output_video.mp4')
         # video_file = request.args.get('video', '')
 

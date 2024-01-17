@@ -19,7 +19,7 @@
         <label for="videoInput">Upload Video File:</label>
         <input type="file" id="videoInput" name="video" accept=".mp4">
 
-        <button type="button" onclick="generateVideo()">Generate Video</button>
+        <button type="submit">Generate Video</button>
     </form>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -38,6 +38,30 @@
             }
         });
 
+        document.querySelector('#videoForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const textInput = document.getElementById('textInput').value;
+            const fileInput = txtFile;
+            const videoInput = document.getElementById('videoInput').files[0];
+            const finalTxt = fileInput == '' ? textInput : fileInput;
+            const formData = new FormData();
+            formData.append('text', finalTxt);
+            formData.append('video', videoInput);
+            formData.forEach((value, key) => {
+                console.log(value,key);
+            });
+            
+            fetch('http://127.0.0.1:5000/generate-video', {
+                method: "POST",
+                body: formData,                
+            }).
+            then((result) => {
+                console.log(result);
+            }).catch((err) => {
+                console.log(err);
+            });         
+        });
+
         async function generateVideo() {
             const textInput = document.getElementById('textInput').value;
             const fileInput = txtFile;
@@ -53,7 +77,7 @@
             //     console.log(pair[0] + ', ' + pair[1]);
             // }
             try {
-                const response = await axios.get('http://127.0.0.1:5000/generate-video', formData, { responseType: 'blob' });
+                const response = await axios.post('http://127.0.0.1:5000/generate-video', formData, { responseType: 'blob' });
                 const videoBlob = new Blob([response.data], { type: 'video/mp4' });
                 const videoElement = document.createElement('video');
                 videoElement.src = URL.createObjectURL(videoBlob);
