@@ -5,7 +5,7 @@ const App = () => {
   const [text, setText] = useState('');
   const [video, setVideo] = useState(null);
   const [resultVideo, setResultVideo] = useState(null);
-
+  const [loading, setLoading] = useState(false);  
   const handleTextChange = (e) => {
     setText(e.target.value);
   };
@@ -18,6 +18,7 @@ const App = () => {
     e.preventDefault();
     console.log("clicked")
     // FormData to send text and video file to the backend
+    setLoading(true);
     const formData = new FormData();
     formData.append('text', text);
     formData.append('video', video);
@@ -32,6 +33,8 @@ const App = () => {
       setResultVideo(URL.createObjectURL(videoBlob));
     } catch (error) {
       console.error('Error submitting the form:', error);
+    } finally {
+      setLoading(false);  
     }
   };
 
@@ -50,7 +53,7 @@ const App = () => {
         <br />
         <button type="submit">Submit</button>
       </form>
-
+      {loading && <p>Loading...</p>}
       {resultVideo && (
         <div>
           <h2>Result Video:</h2>
