@@ -57,13 +57,14 @@ def generate_video():
         # res = CompositeVideoClip([video_clip, text_clip])
 
         # define output video path
-        output_path = './file dump/output_video.mp4'
+        output_path = './final videos/output_video.mp4'
         final_clip.write_videofile(output_path)
         # res.write_videofile(output_path)
 
         # Cleanup: delete the temporary video file
-        # os.remove(video_path)
+        video_clip.close()
         os.remove(speech_input)
+        os.remove(video_path)
 
         return send_file(output_path, as_attachment=True, download_name='output_video.mp4')
         
