@@ -10,6 +10,15 @@ const App = () => {
     setText(e.target.value);
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+     reader.onload = (e) => {
+       setText(e.target.result);
+     }
+     reader.readAsText(file);
+  };
+
   const handleVideoChange = (e) => {
     setVideo(e.target.files[0]);
   };
@@ -44,6 +53,11 @@ const App = () => {
         <label>
           Text:
           <input type="text" value={text} onChange={handleTextChange} />
+        </label>
+        <br />
+        <label>
+          or Upload Text File:
+          <input type="file" accept=".txt" onChange={handleFileChange} />
         </label>
         <br />
         <label>
