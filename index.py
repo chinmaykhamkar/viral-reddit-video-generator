@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 class VideoTranscriber:
     def __init__(self, model_path, video_path, text_path):
-        self.model = whisper.load_model(model_path)
+        self.model = whisper.load_model(model_path).transcribe
         self.video_path = video_path
         self.text_path = text_path
         self.audio_path = ''
