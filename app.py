@@ -1,7 +1,7 @@
 from flask import Flask, after_this_request, jsonify, render_template, request, send_file
 from gtts import gTTS
 from moviepy.editor import VideoFileClip,AudioFileClip,ImageSequenceClip, TextClip, concatenate_videoclips, CompositeVideoClip
-import os
+import os, shutil
 import cv2
 from io import BytesIO
 from flask_cors import CORS
@@ -21,13 +21,24 @@ def generate_video():
         # Get text and video file from request parameters
         text_input = request.form['text']
         video_input = request.files['video']
-        
+        print(video_input)
         ## tts
         speech = gTTS(text_input, lang='en')
         speech_input = './file dump/speech.mp3'
         speech.save(speech_input)
         audio_clip = AudioFileClip(speech_input)
+        video_pathh = './file dump/input_video.mp4'
+        video_input.save(video_pathh)
+        video_clip = VideoFileClip(video_pathh)
         
+        speech_duration = audio_clip.duration
+        video_duration = video_clip.duration
+        repeat_count = int(speech_duration / video_duration) + 1
+        repeated_clips = [video_clip] * repeat_count
+        final_clip = concatenate_videoclips(repeated_clips, method="compose")
+        final_clip = final_clip.subclip(0, speech_duration)
+       
+               
         ## open ai wishper
         model = whisper.load_model("base")
         transcribe = model.transcribe(speech_input)
@@ -35,9 +46,11 @@ def generate_video():
         asp = 16/9   
         text_array = []
         # temp video path
-        video_path = './file dump/input_video.mp4'
-        video_input.save(video_path)
-
+        video_path = './file dump/input_videoo.mp4'
+        
+        # video_input.save(video_path)
+        final_clip.write_videofile(video_path)
+        # os.remove(video_pathh)
         # capture video in cap variable (cv2)
         cap = cv2.VideoCapture(video_path)
         ret, frame = cap.read()
@@ -84,7 +97,7 @@ def generate_video():
                 lines.append(line_array)
                 text_array.append(line_array)       
         
-        print(text_array)
+        # print(text_array)
         
         image_folder = os.path.join(os.path.dirname(video_path), "frames")
         if not os.path.exists(image_folder):
@@ -126,30 +139,35 @@ def generate_video():
         # Load the video clip
         # video_clip = VideoFileClip(video_path)
         
-        speech_duration = audio_clip.duration
-        video_duration = clip.duration
+        # speech_duration = audio_clip.duration
+        # video_duration = clip.duration
         
-        # calculate how many times to repeat the video
-        repeat_count = int(speech_duration / video_duration) + 1
-        repeated_clips = [clip] * repeat_count
-        final_clip = concatenate_videoclips(repeated_clips, method="compose")
+        # # calculate how many times to repeat the video
+        # repeat_count = int(speech_duration / video_duration) + 1
+        # repeated_clips = [clip] * repeat_count
+        # final_clip = concatenate_videoclips(repeated_clips, method="compose")
         
-        # trim video if speech duration is less than video duration
-        final_clip = final_clip.subclip(0, speech_duration)
+        # # trim video if speech duration is less than video duration
+        # final_clip = final_clip.subclip(0, speech_duration)
         
         # add speech to video 
-        final_clip = final_clip.set_audio(audio_clip)
+        clip = clip.set_audio(audio_clip)
 
         # define output video path
         output_path = './final videos/output_video.mp4'
-        final_clip.write_videofile(output_path)
+        clip.write_videofile(output_path)
         # final_clip.write_videofile(output_path)
         # res.write_videofile(output_path)
 
         # Cleanup: delete the temporary video file
         final_clip.close()
-        # os.remove(speech_input)
-        # os.remove(video_path)
+        clip.close()
+        os.remove(speech_input)
+        os.remove(video_path)
+        # os.remove(video_pathh)
+        shutil.rmtree(image_folder)
+        # shutil.rmtree('/file dump')
+        # os.remove(video_pathh)
 
         return send_file(output_path, as_attachment=True, download_name='output_video.mp4')
         
