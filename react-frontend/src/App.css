@@ -1,9 +1,9 @@
 .App {
-  background-color: red;
+  background: linear-gradient(to top, rgb(161, 140, 209) 0%, rgb(251, 194, 235) 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 100%;
+  height: auto;
 }
 

@@ -1,0 +1,25 @@
+.video-section {
+    /* background-color: red;s */
+    display: flex;
+    height: auto;
+    width: 100%;
+    justify-content: center;
+    flex-direction: column;
+}
+.video-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: cursive;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: white;
+}
+.template {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    -webkit-text-fill-color: transparent;
+    background: rgb(165,28,199);
+background: radial-gradient(circle, rgba(165,28,199,1) 0%, rgba(63,31,71,1) 84%);
+    background-clip: text;
+}
