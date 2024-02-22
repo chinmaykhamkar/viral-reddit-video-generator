@@ -23,3 +23,19 @@
 background: radial-gradient(circle, rgba(165,28,199,1) 0%, rgba(63,31,71,1) 84%);
     background-clip: text;
 }
+
+.video {
+    display: flex;
+    /* background-color: pink; */
+    width: 100%;
+    height: auto;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+.video-divs {
+    display: flex;
+    /* background-color: aquamarine; */
+    width: 23%;
+    height: auto;
+    margin: 10px;
+}
